@@ -4,12 +4,11 @@
 <!doctype html>
 <html>
 <head>
-<title>Shopping list</title>
-<link rel="stylesheet"
-	href="https://unpkg.com/sakura.css/css/sakura-ink.css" type="text/css">
+<title>Artist</title>
+<link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-ink.css" type="text/css">
 </head>
 <body>
-	<h2>Shopping list</h2>
+	<h2>Artists</h2>
 	
 	<form name="testi" method="post">
     	<input name="title" type="text" required placeholder="type item here..." autofocus /> <br />
@@ -19,17 +18,20 @@
 	<table>
 		<thead>
 			<tr>
-				<th>Artists</th>
+				<th>List of all artists</th>
 			</tr>
 		</thead>
+		
 		<tbody>
 			<c:forEach items="${ artists }" var="s">
 				<tr id="artist-${s.getId()}">
+
 					<td class="artist"><a href="/albums?ArtistId=${s.getId()}"><c:out value="${ s.getName() }"></c:out></a></td>
-					
+	
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+	
 </body>
 </html>

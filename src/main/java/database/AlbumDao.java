@@ -1,4 +1,4 @@
-package databasae;
+package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,7 +18,7 @@ public class AlbumDao {
 		return DriverManager.getConnection(JDBC_URL);
 	}
 	
-	public List<Album> getAlbum(long id) {
+	public List<Album> getAlbums(long artistId) {
 
 		List<Album> albums = new ArrayList<>();
 
@@ -26,7 +26,7 @@ public class AlbumDao {
 				PreparedStatement findStatement = connection.prepareStatement("SELECT AlbumId, Title, ArtistId FROM Album WHERE ArtistId = ?");
 				ResultSet results = findStatement.executeQuery()) {
 
-			findStatement.setLong(1, id);
+			findStatement.setLong(1, artistId);
 			findStatement.executeQuery();
 			
 			while (results.next()) {
@@ -45,25 +45,4 @@ public class AlbumDao {
 
 	}
 	
-	public List<Album> getAllAlbums() {
-
-		List<Album> selectAll = new ArrayList<>();
-
-		try (Connection connection = connect();
-				PreparedStatement statement = connection.prepareStatement("SELECT AlbumId, Title, ArtistId FROM Album");
-				ResultSet results = statement.executeQuery()) {
-
-			while (results.next()) {
-				long albumId = results.getLong("AlbumId");
-				long artistId = results.getLong("ArtistId");
-				String title = results.getString("Title");
-				Album newAlbum = new Album(albumId, artistId, title);
-				selectAll.add(newAlbum);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return selectAll;
-	}
 }

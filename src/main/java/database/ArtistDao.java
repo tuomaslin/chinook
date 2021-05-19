@@ -1,17 +1,16 @@
-package databasae;
+package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import model.Artist;
 
 public class ArtistDao {
-	
+
 	public static final String JDBC_URL = System.getenv("JDBC_DATABASE_URL");
 
 	public Connection connect() throws SQLException {
@@ -19,78 +18,76 @@ public class ArtistDao {
 	}
 
 	public List<Artist> getAllArtists() {
-		
-		List<Artist> selectAll = new ArrayList<>();
-		
-		try (Connection connection = connect();
-	    	    PreparedStatement statement = connection.prepareStatement("SELECT ArtistId, Name FROM Artist ORDER BY Name ASC");
-	    	    ResultSet results = statement.executeQuery()) {
-	    	
-	    	while (results.next()) {
-	    		long artistId = results.getLong("ArtistId");
-	    		String name = results.getString("Name");
-	    		Artist newArtist = new Artist(artistId, name);
-	    		selectAll.add(newArtist);
-	    	}
-	    	 
-	    } catch (SQLException e) {
-	    	e.printStackTrace();
-	    }
-	    return selectAll;
-	}
-	
-	public Artist getId(long id) {
-    
-		Artist searchResult = new Artist(id, null);
+
+		List<Artist> artistList = new ArrayList<>();
 
 		try (Connection connection = connect();
-				PreparedStatement findStatement = connection.prepareStatement("SELECT AlbumId, Title FROM Album WHERE ArtistId = ?");
+				PreparedStatement statement = connection
+						.prepareStatement("SELECT ArtistId, Name FROM Artist ORDER BY Name ASC");
+				ResultSet results = statement.executeQuery()) {
+
+			while (results.next()) {
+				long artistId = results.getLong("ArtistId");
+				String name = results.getString("Name");
+				Artist newArtist = new Artist(artistId, name);
+				artistList.add(newArtist);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return artistList;
+	}
+
+	public boolean addArtist(Artist newArtist) {
+
+		String i = newArtist.getName();
+		boolean b = false;
+
+		try (Connection connection = connect();
+				PreparedStatement addStatement = connection.prepareStatement("INSERT INTO Artist (Name) VALUES (?)");
+				PreparedStatement checkStatement = connection.prepareStatement("SELECT * FROM Artist WHERE Name = ?");
+				ResultSet r = checkStatement.executeQuery()) {
+
+			checkStatement.setString(1, i);
+			checkStatement.executeQuery();
+
+			if (r.next()) {
+				b = false;
+			} else {
+				addStatement.setString(1, i);
+				addStatement.executeUpdate();
+				b = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return b;
+	}
+
+	public Artist getArtist(long artistId) {
+
+		Artist searchResult = new Artist(artistId, null);
+
+		try (Connection connection = connect();
+				PreparedStatement findStatement = connection
+						.prepareStatement("SELECT * FROM Artist WHERE ArtistId = ?");
 				ResultSet results = findStatement.executeQuery()) {
 
-			findStatement.setLong(1, id);
+			findStatement.setLong(1, artistId);
 			findStatement.executeQuery();
 
-			if (results.next()) {
-				long resultId = results.getLong("AlbumId");
-				String title = results.getString("Title");
-				searchResult = new Artist(resultId, title);
-			} else {
-				return null;
+			while (results.next()) {
+				String name = results.getString("Name");
+				searchResult = new Artist(name);
 			}
+
 		} catch (SQLException | NullPointerException e) {
 			e.printStackTrace();
 
 		}
 		return searchResult;
 
-	}
-	
-	public boolean addArtist(Artist newItem) {
-		   
-	    String i = newItem.getName();
-	    boolean b = false;
-	   	 
-	   	 try (Connection connection = connect();
-	   		 PreparedStatement addStatement = connection.prepareStatement("INSERT INTO Artist (Name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-	   		 PreparedStatement checkStatement= connection.prepareStatement ("SELECT * FROM Artist WHERE Name = ?");
-	   		 ResultSet r = checkStatement.executeQuery();
-	   		 ResultSet rs = addStatement.getGeneratedKeys()) {
-	   		 
-	   		checkStatement.setString (1, i);
-			checkStatement.executeQuery();
-	   		 
-	   		 if (r.next()) {
-	   			 b = false;
-	   		 } else {
-	   			 addStatement.setString(1, i);
-	   			 addStatement.executeUpdate();
-	   			 b = true;
-	   		 }
-
-	   		
-	   	 } catch (SQLException e) {
-	   		 e.printStackTrace();
-	   	 }
-	   	 return b;
 	}
 }
