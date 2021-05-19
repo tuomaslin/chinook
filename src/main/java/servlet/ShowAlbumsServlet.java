@@ -8,33 +8,31 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import databasae.AlbumDao;
+import database.AlbumDao;
+import database.ArtistDao;
 import model.Album;
+import model.Artist;
 
+@SuppressWarnings("serial")
 @WebServlet("/albums")
-public class ShowAlbumsServlet extends HttpServlet{
+public class ShowAlbumsServlet extends HttpServlet {
 
-		private AlbumDao dao = new AlbumDao();
-		
-		@Override
-		protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-			String artistId = req.getParameter("ArtistId");
-			long id = Long.parseLong(artistId);
-			
-			List<Album> albums = dao.getAlbum(id);
+	private AlbumDao albumDao = new AlbumDao();
+	private ArtistDao artistDao = new ArtistDao();
 
-			req.setAttribute("albums", albums);
-			req.getRequestDispatcher("/WEB-INF/search.jsp").forward(req, resp);
-		}
-		
-		
-		/*@Override
-		protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-			Album newArtist = new Album(0, req.getParameter("artist"));
-			String ArtistId = req.getParameter("ArtistId=");
-			long id = Long.parseLong(ArtistId);
-			
-			dao.getAlbum(id);
-			resp.sendRedirect("/albums");
-		}*/
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String artistId = req.getParameter("ArtistId");
+		long id = Long.parseLong(artistId);
+
+		Artist artist = artistDao.getArtist(id);
+		String artistName = artist.toString();
+
+		List<Album> albums = albumDao.getAlbums(id);
+
+		req.setAttribute("artistName", artistName);
+		req.setAttribute("albums", albums);
+		req.getRequestDispatcher("/WEB-INF/search.jsp").forward(req, resp);
 	}
+
+}
