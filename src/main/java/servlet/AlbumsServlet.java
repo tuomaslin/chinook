@@ -15,7 +15,7 @@ import model.Artist;
 
 @SuppressWarnings("serial")
 @WebServlet("/albums")
-public class ShowAlbumsServlet extends HttpServlet {
+public class AlbumsServlet extends HttpServlet {
 
 	private JDBCAlbumDao albumDao = new JDBCAlbumDao();
 	private JDBCArtistDao artistDao = new JDBCArtistDao();
@@ -32,7 +32,7 @@ public class ShowAlbumsServlet extends HttpServlet {
 
 		req.setAttribute("artistName", artistName);
 		req.setAttribute("albums", albums);
-		req.getRequestDispatcher("/WEB-INF/search.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/albums.jsp").forward(req, resp);
 	}
 
 }

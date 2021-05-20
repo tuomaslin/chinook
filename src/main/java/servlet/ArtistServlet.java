@@ -14,7 +14,7 @@ import model.Artist;
 
 @SuppressWarnings("serial")
 @WebServlet("/")
-public class ArtistServletList extends HttpServlet {
+public class ArtistServlet extends HttpServlet {
 
 	private JDBCArtistDao dao = new JDBCArtistDao();
 
