@@ -10,11 +10,6 @@
 <body>
 	<h2>List of albums</h2>
 	
-	<form name="testi" method="post">
-    	<input name="title" type="text" required placeholder="type item here..." autofocus /> <br />
-    	<input type="submit" value="Add artist to list" />
-	</form>
-
 	<table>
 		<thead>
 			<tr>

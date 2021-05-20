@@ -32,7 +32,9 @@ public class Artist {
 
 	@Override
 	public String toString() {
-		return name;
+		return "Artist [id=" + id + ", name=" + name + "]";
 	}
+
+
 
 }

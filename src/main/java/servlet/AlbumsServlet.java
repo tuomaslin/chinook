@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import database.AlbumDao;
-import database.ArtistDao;
+import database.JDBCAlbumDao;
+import database.JDBCArtistDao;
 import model.Album;
 import model.Artist;
 
@@ -17,18 +17,18 @@ import model.Artist;
 @WebServlet("/albums")
 public class ShowAlbumsServlet extends HttpServlet {
 
-	private AlbumDao albumDao = new AlbumDao();
-	private ArtistDao artistDao = new ArtistDao();
+	private JDBCAlbumDao albumDao = new JDBCAlbumDao();
+	private JDBCArtistDao artistDao = new JDBCArtistDao();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String artistId = req.getParameter("ArtistId");
-		long id = Long.parseLong(artistId);
+		
+		Long artistId = Long.parseLong(req.getParameter("ArtistId"));
 
-		Artist artist = artistDao.getArtist(id);
-		String artistName = artist.toString();
+		Artist artist = artistDao.getArtist(artistId);
+		String artistName = artist.getName();
 
-		List<Album> albums = albumDao.getAlbums(id);
+		List<Album> albums = albumDao.getAlbums(artistId);
 
 		req.setAttribute("artistName", artistName);
 		req.setAttribute("albums", albums);

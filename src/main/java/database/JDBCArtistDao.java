@@ -9,14 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Artist;
 
-public class ArtistDao {
+public class JDBCArtistDao implements ArtistDao {
 
 	public static final String JDBC_URL = System.getenv("JDBC_DATABASE_URL");
 
 	public Connection connect() throws SQLException {
 		return DriverManager.getConnection(JDBC_URL);
 	}
-
+	
+	@Override
 	public List<Artist> getAllArtists() {
 
 		List<Artist> artistList = new ArrayList<>();
@@ -38,7 +39,8 @@ public class ArtistDao {
 		}
 		return artistList;
 	}
-
+	
+	@Override
 	public boolean addArtist(Artist newArtist) {
 
 		String i = newArtist.getName();
@@ -66,6 +68,7 @@ public class ArtistDao {
 		return b;
 	}
 
+	@Override
 	public Artist getArtist(long artistId) {
 
 		Artist searchResult = new Artist(artistId, null);

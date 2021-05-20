@@ -10,7 +10,7 @@ import java.util.List;
 
 import model.Album;
 
-public class AlbumDao {
+public class JDBCAlbumDao implements AlbumDao{
 	
 	public static final String JDBC_URL = System.getenv("JDBC_DATABASE_URL");
 
@@ -18,6 +18,7 @@ public class AlbumDao {
 		return DriverManager.getConnection(JDBC_URL);
 	}
 	
+	@Override
 	public List<Album> getAlbums(long artistId) {
 
 		List<Album> albums = new ArrayList<>();
