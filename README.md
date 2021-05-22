@@ -1,4 +1,4 @@
-# chinook
+# chinook (https://github.com/lerocha/chinook-database)
 
 Database project where one can add artists:
 
