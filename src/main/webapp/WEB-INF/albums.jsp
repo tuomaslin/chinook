@@ -13,7 +13,7 @@
 	<table>
 		<thead>
 			<tr>
-				<th>Albums for ${ artistName }</th>
+				<th>Albums for <c:out value="${ artistName }"></c:out></th>
 			</tr>
 		</thead>
 
